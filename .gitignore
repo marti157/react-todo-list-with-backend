@@ -18,3 +18,7 @@ yarn.lock
 # logs
 #
 logs/
+
+# config
+#
+config.js

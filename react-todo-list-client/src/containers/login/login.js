@@ -11,6 +11,7 @@ import {
   Checkbox,
   Typography,
 } from '@material-ui/core/';
+import crypto from 'crypto';
 import { Context } from '../../store/store';
 import Api from '../../api/api';
 
@@ -71,7 +72,13 @@ export default function Login() {
 
   const handleSubmit = async () => {
     setError(null);
-    const { err, data } = await Api.login({ username, password, remember: checked });
+    const hash = crypto.createHash('sha256');
+    hash.update(password);
+    const { err, data } = await Api.login({
+      username,
+      password: hash.digest('hex'),
+      remember: checked,
+    });
     if (err) {
       setError(err.message);
     } else {

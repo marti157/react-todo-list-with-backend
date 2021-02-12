@@ -9,6 +9,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core/';
+import crypto from 'crypto';
 import { Context } from '../../store/store';
 import Api from '../../api/api';
 
@@ -90,7 +91,9 @@ export default function Login() {
     if (!username || !password || !confirm) return;
     if (usernameError || passwordError || confirmError) return;
     setError(null);
-    const { err } = await Api.register({ username, password });
+    const hash = crypto.createHash('sha256');
+    hash.update(password);
+    const { err } = await Api.register({ username, password: hash.digest('hex') });
     if (err) {
       setError(err.message);
     } else {
